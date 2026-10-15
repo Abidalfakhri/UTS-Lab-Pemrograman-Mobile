@@ -6,7 +6,7 @@ import '../widgets/gradient_background.dart';
 import '../widgets/pill_field.dart';
 import '../widgets/primary_button.dart';
 import '../widgets/screen_header.dart';
-import 'quiz_page.dart';
+import 'home_page.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
@@ -29,7 +29,7 @@ class _WelcomePageState extends State<WelcomePage> {
     if (!_formKey.currentState!.validate()) return;
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => QuizPage(playerName: _nameController.text.trim()),
+        builder: (_) => HomePage(playerName: _nameController.text.trim()),
       ),
     );
   }
@@ -69,7 +69,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   ),
                   SizedBox(height: context.hp(2.5)),
                   PrimaryButton(
-                    label: 'Mulai Kuis',
+                    label: 'Mulai',
                     icon: Icons.arrow_forward_rounded,
                     onPressed: _start,
                   ),
