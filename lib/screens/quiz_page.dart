@@ -8,6 +8,7 @@ import '../widgets/option_tile.dart';
 import '../widgets/primary_button.dart';
 import '../widgets/quiz_progress_bar.dart';
 import '../widgets/screen_header.dart';
+import 'result_page.dart';
 
 class QuizPage extends StatelessWidget {
   const QuizPage({super.key});
@@ -20,22 +21,8 @@ class QuizPage extends StatelessWidget {
       return;
     }
     quiz.finish();
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (dialogContext) => AlertDialog(
-        title: Text('Skor ${quiz.playerName}'),
-        content: Text('${quiz.score} / ${quiz.total}'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(dialogContext).pop();
-              Navigator.of(context).pop();
-            },
-            child: const Text('Selesai'),
-          ),
-        ],
-      ),
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const ResultPage()),
     );
   }
 
