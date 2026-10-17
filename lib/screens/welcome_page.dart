@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/quiz_provider.dart';
 import '../utils/responsive.dart';
 import '../widgets/app_logo.dart';
 import '../widgets/gradient_background.dart';
@@ -27,9 +29,11 @@ class _WelcomePageState extends State<WelcomePage> {
 
   void _start() {
     if (!_formKey.currentState!.validate()) return;
+    context.read<QuizProvider>().setPlayerName(_nameController.text.trim());
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => HomePage(playerName: _nameController.text.trim()),
+        settings: const RouteSettings(name: 'home'),
+        builder: (_) => const HomePage(),
       ),
     );
   }

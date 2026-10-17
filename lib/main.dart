@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'providers/quiz_provider.dart';
 import 'screens/welcome_page.dart';
 import 'theme/app_theme.dart';
 
 void main() {
-  runApp(const QuizApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => QuizProvider(),
+      child: const QuizApp(),
+    ),
+  );
 }
 
 class QuizApp extends StatelessWidget {

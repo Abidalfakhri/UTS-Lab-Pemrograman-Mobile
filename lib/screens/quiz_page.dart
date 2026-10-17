@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../models/quiz.dart';
+import '../providers/quiz_provider.dart';
 import '../utils/responsive.dart';
 import '../widgets/gradient_background.dart';
 import '../widgets/option_tile.dart';
@@ -8,44 +9,23 @@ import '../widgets/primary_button.dart';
 import '../widgets/quiz_progress_bar.dart';
 import '../widgets/screen_header.dart';
 
-class QuizPage extends StatefulWidget {
-  const QuizPage({super.key, required this.playerName, required this.quiz});
+class QuizPage extends StatelessWidget {
+  const QuizPage({super.key});
 
-  final String playerName;
-  final Quiz quiz;
-
-  @override
-  State<QuizPage> createState() => _QuizPageState();
-}
-
-class _QuizPageState extends State<QuizPage> {
   static const _letters = ['A', 'B', 'C', 'D', 'E'];
 
-  int _index = 0;
-  late final List<int?> _answers =
-      List<int?>.filled(widget.quiz.questions.length, null);
-
-  bool get _isLast => _index == widget.quiz.questions.length - 1;
-
-  int get _score {
-    var result = 0;
-    for (var i = 0; i < _answers.length; i++) {
-      if (_answers[i] == widget.quiz.questions[i].correctIndex) result++;
-    }
-    return result;
-  }
-
-  void _next() {
-    if (!_isLast) {
-      setState(() => _index++);
+  void _onNext(BuildContext context, QuizProvider quiz) {
+    if (!quiz.isLast) {
+      quiz.next();
       return;
     }
+    quiz.finish();
     showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (dialogContext) => AlertDialog(
-        title: Text('Skor ${widget.playerName}'),
-        content: Text('$_score / ${widget.quiz.questions.length}'),
+        title: Text('Skor ${quiz.playerName}'),
+        content: Text('${quiz.score} / ${quiz.total}'),
         actions: [
           TextButton(
             onPressed: () {
@@ -61,7 +41,8 @@ class _QuizPageState extends State<QuizPage> {
 
   @override
   Widget build(BuildContext context) {
-    final question = widget.quiz.questions[_index];
+    final quiz = context.watch<QuizProvider>();
+    final question = quiz.currentQuestion;
     final scheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -73,10 +54,7 @@ class _QuizPageState extends State<QuizPage> {
           child: Column(
             children: [
               const SizedBox(height: kToolbarHeight),
-              QuizProgressBar(
-                current: _index + 1,
-                total: widget.quiz.questions.length,
-              ),
+              QuizProgressBar(current: quiz.currentIndex + 1, total: quiz.total),
               SizedBox(height: context.hp(2)),
               Expanded(
                 child: SingleChildScrollView(
@@ -84,8 +62,8 @@ class _QuizPageState extends State<QuizPage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       ScreenHeader(
-                        title: widget.quiz.title,
-                        subtitle: 'Halo, ${widget.playerName}',
+                        title: quiz.quiz.title,
+                        subtitle: 'Halo, ${quiz.playerName}',
                       ),
                       SizedBox(height: context.hp(2.5)),
                       Container(
@@ -110,8 +88,8 @@ class _QuizPageState extends State<QuizPage> {
                         OptionTile(
                           label: _letters[i],
                           text: question.options[i],
-                          isSelected: _answers[_index] == i,
-                          onTap: () => setState(() => _answers[_index] = i),
+                          isSelected: quiz.currentAnswer == i,
+                          onTap: () => quiz.select(i),
                         ),
                     ],
                   ),
@@ -121,9 +99,9 @@ class _QuizPageState extends State<QuizPage> {
                 padding: EdgeInsets.symmetric(vertical: context.hp(2)),
                 child: Row(
                   children: [
-                    if (_index > 0) ...[
+                    if (!quiz.isFirst) ...[
                       IconButton.filledTonal(
-                        onPressed: () => setState(() => _index--),
+                        onPressed: quiz.previous,
                         icon: const Icon(Icons.arrow_back_rounded),
                         tooltip: 'Sebelumnya',
                       ),
@@ -131,11 +109,13 @@ class _QuizPageState extends State<QuizPage> {
                     ],
                     Expanded(
                       child: PrimaryButton(
-                        label: _isLast ? 'Selesai' : 'Lanjut',
-                        icon: _isLast
+                        label: quiz.isLast ? 'Selesai' : 'Lanjut',
+                        icon: quiz.isLast
                             ? Icons.flag_rounded
                             : Icons.arrow_forward_rounded,
-                        onPressed: _answers[_index] == null ? null : _next,
+                        onPressed: quiz.currentAnswer == null
+                            ? null
+                            : () => _onNext(context, quiz),
                       ),
                     ),
                   ],

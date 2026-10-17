@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../data/quizzes_data.dart';
+import '../providers/quiz_provider.dart';
 import '../utils/responsive.dart';
 import '../widgets/category_chip.dart';
 import '../widgets/gradient_background.dart';
@@ -9,9 +11,7 @@ import '../widgets/screen_header.dart';
 import 'quiz_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.playerName});
-
-  final String playerName;
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -27,19 +27,16 @@ class _HomePageState extends State<HomePage> {
   };
 
   void _open(int quizIndex) {
+    context.read<QuizProvider>().start(quizzesData[quizIndex]);
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => QuizPage(
-          playerName: widget.playerName,
-          quiz: quizzesData[quizIndex],
-        ),
-      ),
+      MaterialPageRoute(builder: (_) => const QuizPage()),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final state = context.watch<QuizProvider>();
     final visible = [
       for (var i = 0; i < quizzesData.length; i++)
         if (_category == quizCategories.first ||
@@ -58,7 +55,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               const SizedBox(height: kToolbarHeight),
               ScreenHeader(
-                title: 'Halo, ${widget.playerName}',
+                title: 'Halo, ${state.playerName}',
                 subtitle: 'Pilih kuis yang ingin kamu kerjakan',
               ),
               SizedBox(height: context.hp(3)),
@@ -91,8 +88,10 @@ class _HomePageState extends State<HomePage> {
               for (final i in visible)
                 QuizCard(
                   quiz: quizzesData[i],
-                  statusText: 'Belum Dimulai',
-                  completed: false,
+                  statusText: state.scoreOf(quizzesData[i].id) == null
+                      ? 'Belum Dimulai'
+                      : 'Skor ${state.scoreOf(quizzesData[i].id)}/${quizzesData[i].questions.length}',
+                  completed: state.scoreOf(quizzesData[i].id) != null,
                   onTap: () => _open(i),
                 ),
               SizedBox(height: context.hp(2)),
