@@ -8,6 +8,7 @@ import '../widgets/option_tile.dart';
 import '../widgets/primary_button.dart';
 import '../widgets/quiz_progress_bar.dart';
 import '../widgets/screen_header.dart';
+import '../widgets/theme_toggle_button.dart';
 import 'result_page.dart';
 
 class QuizPage extends StatelessWidget {
@@ -34,7 +35,12 @@ class QuizPage extends StatelessWidget {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          const ThemeToggleButton(),
+          SizedBox(width: context.wp(3)),
+        ],
+      ),
       body: GradientBackground(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: context.wp(5)),

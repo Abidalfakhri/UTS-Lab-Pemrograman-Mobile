@@ -8,6 +8,7 @@ import '../widgets/gradient_background.dart';
 import '../widgets/pill_field.dart';
 import '../widgets/primary_button.dart';
 import '../widgets/screen_header.dart';
+import '../widgets/theme_toggle_button.dart';
 import 'home_page.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -52,7 +53,13 @@ class _WelcomePageState extends State<WelcomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const AppLogo(),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AppLogo(),
+                      ThemeToggleButton(),
+                    ],
+                  ),
                   SizedBox(height: context.hp(3)),
                   const ScreenHeader(
                     title: 'QuizKu',

@@ -8,6 +8,7 @@ import '../widgets/category_chip.dart';
 import '../widgets/gradient_background.dart';
 import '../widgets/quiz_card.dart';
 import '../widgets/screen_header.dart';
+import '../widgets/theme_toggle_button.dart';
 import 'quiz_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -46,7 +47,12 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          const ThemeToggleButton(),
+          SizedBox(width: context.wp(3)),
+        ],
+      ),
       body: GradientBackground(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: context.wp(6)),
