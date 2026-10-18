@@ -54,6 +54,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: GradientBackground(
+        maxContentWidth: 900,
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: context.wp(6)),
           child: Column(
@@ -91,15 +92,32 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               SizedBox(height: context.hp(1.5)),
-              for (final i in visible)
-                QuizCard(
-                  quiz: quizzesData[i],
-                  statusText: state.scoreOf(quizzesData[i].id) == null
-                      ? 'Belum Dimulai'
-                      : 'Skor ${state.scoreOf(quizzesData[i].id)}/${quizzesData[i].questions.length}',
-                  completed: state.scoreOf(quizzesData[i].id) != null,
-                  onTap: () => _open(i),
-                ),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final columns = context.isWide ? 2 : 1;
+                  final gap = context.wp(3);
+                  final itemWidth =
+                      (constraints.maxWidth - gap * (columns - 1)) / columns -
+                          0.5;
+                  return Wrap(
+                    spacing: gap,
+                    children: [
+                      for (final i in visible)
+                        SizedBox(
+                          width: itemWidth,
+                          child: QuizCard(
+                            quiz: quizzesData[i],
+                            statusText: state.scoreOf(quizzesData[i].id) == null
+                                ? 'Belum Dimulai'
+                                : 'Skor ${state.scoreOf(quizzesData[i].id)}/${quizzesData[i].questions.length}',
+                            completed: state.scoreOf(quizzesData[i].id) != null,
+                            onTap: () => _open(i),
+                          ),
+                        ),
+                    ],
+                  );
+                },
+              ),
               SizedBox(height: context.hp(2)),
             ],
           ),
