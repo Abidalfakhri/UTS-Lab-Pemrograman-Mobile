@@ -51,6 +51,9 @@ lib/
 - Referensi gaya visual: mockup aplikasi "Browse Courses / Shorts / Articles / Quizzes" (isi sumber atau link referensi)
 
 ### Screenshot Tiap Halaman
+| Welcome | Daftar Kuis | Kuis | Hasil |
+|---|---|---|---|
+| <img src="screenshots/Welcome.png" width="180"> | <img src="screenshots/DaftarKuis.png" width="180"> | <img src="screenshots/Kuis.png" width="180"> | <img src="screenshots/Hasil.png" width="180"> |
 
 ### Link Mockup / Prototype
 https://www.figma.com/design/9jSNBP9MACc19MiBBJ2y8L/Mockup-QuizKu?node-id=0-1&t=p3FsOrkZXeiMQIbe-1
