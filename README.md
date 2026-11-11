@@ -47,8 +47,7 @@ lib/
   - Situs: https://openmoji.org
   - Repository: https://github.com/hfg-gmuend/openmoji
   - Lisensi: https://creativecommons.org/licenses/by-sa/4.0/
-- Ikon: Material Icons bawaan Flutter
-- Referensi gaya visual: mockup aplikasi "Browse Courses / Shorts / Articles / Quizzes" (isi sumber atau link referensi)
+- Ikon: Material Icons bawaan Flutter
 
 ### Screenshot Tiap Halaman
 | Welcome | Daftar Kuis | Kuis | Hasil |
